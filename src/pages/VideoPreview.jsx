@@ -1,27 +1,16 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  Alert,
-  Box,
-  Button,
-  Stack,
-  Slider,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Slider, Stack, Typography } from "@mui/material";
+import ImageComparison from "../components/ImageComparison";
 
 export default function VideoPreview() {
   const { filename } = useParams();
-  const [error, setError] = useState(false);
   const [targetColor, setTargetColor] = useState("#ffa200");
   const [threshold, setThreshold] = useState(164);
 
   return (
     <Stack spacing={3}>
-      <Button
-        component={Link}
-        to="/videos"
-        sx={{ alignSelf: "flex-start" }}
-      >
+      <Button component={Link} to="/videos" sx={{ alignSelf: "flex-start" }}>
         Back to videos
       </Button>
 
@@ -31,24 +20,12 @@ export default function VideoPreview() {
 
       <Typography>{filename}</Typography>
 
-      {error ? (
-        <Alert severity="error">
-          Could not load the thumbnail. Check that the server is running.
-        </Alert>
-      ) : (
-        <Box
-          component="img"
-          src={`/thumbnail/${encodeURIComponent(filename)}`}
-          alt={`First frame of ${filename}`}
-          onError={() => setError(true)}
-          sx={{
-            width: "100%",
-            maxWidth: 640,
-            height: "auto",
-            borderRadius: 2,
-          }}
-        />
-      )}
+      <ImageComparison
+        key={filename}
+        filename={filename}
+        targetColor={targetColor}
+        threshold={threshold}
+      />
 
       <Stack spacing={3} sx={{ maxWidth: 640 }}>
         <Stack direction="row" spacing={2} alignItems="center">
@@ -67,9 +44,7 @@ export default function VideoPreview() {
         </Stack>
 
         <Box>
-          <Typography id="threshold-label">
-            Threshold: {threshold}
-          </Typography>
+          <Typography id="threshold-label">Threshold: {threshold}</Typography>
 
           <Slider
             aria-labelledby="threshold-label"
