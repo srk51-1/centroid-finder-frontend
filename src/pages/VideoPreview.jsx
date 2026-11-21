@@ -5,12 +5,15 @@ import {
   Box,
   Button,
   Stack,
+  Slider,
   Typography,
 } from "@mui/material";
 
 export default function VideoPreview() {
   const { filename } = useParams();
   const [error, setError] = useState(false);
+  const [targetColor, setTargetColor] = useState("#ffa200");
+  const [threshold, setThreshold] = useState(164);
 
   return (
     <Stack spacing={3}>
@@ -46,6 +49,39 @@ export default function VideoPreview() {
           }}
         />
       )}
+
+      <Stack spacing={3} sx={{ maxWidth: 640 }}>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography component="label" htmlFor="target-color">
+            Target color
+          </Typography>
+
+          <input
+            id="target-color"
+            type="color"
+            value={targetColor}
+            onChange={(event) => setTargetColor(event.target.value)}
+          />
+
+          <Typography>{targetColor.toUpperCase()}</Typography>
+        </Stack>
+
+        <Box>
+          <Typography id="threshold-label">
+            Threshold: {threshold}
+          </Typography>
+
+          <Slider
+            aria-labelledby="threshold-label"
+            min={0}
+            max={442}
+            step={1}
+            value={threshold}
+            onChange={(_, value) => setThreshold(value)}
+            valueLabelDisplay="auto"
+          />
+        </Box>
+      </Stack>
     </Stack>
   );
 }
