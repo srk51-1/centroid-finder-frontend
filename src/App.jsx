@@ -1,18 +1,12 @@
 import {
   BrowserRouter,
-  Link,
   Navigate,
   Route,
   Routes,
 } from "react-router-dom";
-import {
-  Button,
-  Container,
-  CssBaseline,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import VideoChooser from "./pages/VideoChooser";
+import VideoPreview from "./pages/VideoPreview";
 
 export default function App() {
   return (
@@ -27,21 +21,7 @@ export default function App() {
 
           <Route
             path="/preview/:filename"
-            element={
-              <Stack spacing={3}>
-                <Typography variant="h4" component="h1">
-                  Video Preview
-                </Typography>
-
-                <Typography>
-                  We will add the thumbnail and settings here next.
-                </Typography>
-
-                <Button component={Link} to="/videos">
-                  Back to videos
-                </Button>
-              </Stack>
-            }
+            element={<VideoPreview />}
           />
 
           <Route path="*" element={<Navigate to="/videos" replace />} />
