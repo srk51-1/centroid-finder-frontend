@@ -26,6 +26,7 @@ export default function VideoPreview() {
         filename={filename}
         targetColor={targetColor}
         threshold={threshold}
+        onColorPick={setTargetColor}
       />
 
 <ProcessingJob
