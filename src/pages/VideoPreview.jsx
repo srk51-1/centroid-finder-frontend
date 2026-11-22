@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Box, Button, Slider, Stack, Typography } from "@mui/material";
 import ImageComparison from "../components/ImageComparison";
+import ProcessingJob from "../components/ProcessingJob";
 
 export default function VideoPreview() {
   const { filename } = useParams();
@@ -22,6 +23,13 @@ export default function VideoPreview() {
 
       <ImageComparison
         key={filename}
+        filename={filename}
+        targetColor={targetColor}
+        threshold={threshold}
+      />
+
+<ProcessingJob
+        key={`job-${filename}`}
         filename={filename}
         targetColor={targetColor}
         threshold={threshold}
