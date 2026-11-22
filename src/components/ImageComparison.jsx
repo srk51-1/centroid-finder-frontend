@@ -6,6 +6,7 @@ export default function ImageComparison({
   filename,
   targetColor,
   threshold,
+  onColorPick,
 }) {
   const [pixels, setPixels] = useState(null);
   const [error, setError] = useState("");
@@ -22,14 +23,47 @@ export default function ImageComparison({
       const context = canvas.getContext("2d");
       context.drawImage(image, 0, 0);
 
-      setPixels(
-        context.getImageData(0, 0, canvas.width, canvas.height)
-      );
+      setPixels(context.getImageData(0, 0, canvas.width, canvas.height));
     } catch {
       setError("Could not read the thumbnail pixels.");
     }
   }
 
+  function pickColor(event) {
+    if (!pixels) return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+
+    const x = Math.min(
+      pixels.width - 1,
+      Math.max(
+        0,
+        Math.floor(
+          ((event.clientX - bounds.left) / bounds.width) * pixels.width
+        )
+      )
+    );
+
+    const y = Math.min(
+      pixels.height - 1,
+      Math.max(
+        0,
+        Math.floor(
+          ((event.clientY - bounds.top) / bounds.height) * pixels.height
+        )
+      )
+    );
+
+    const index = (y * pixels.width + x) * 4;
+
+    const color =
+      "#" +
+      [pixels.data[index], pixels.data[index + 1], pixels.data[index + 2]]
+        .map((value) => value.toString(16).padStart(2, "0"))
+        .join("");
+
+    onColorPick(color);
+  }
   useEffect(() => {
     if (!pixels) return;
 
@@ -58,9 +92,7 @@ export default function ImageComparison({
         const blueDifference = pixels.data[i + 2] - blue;
 
         const distance = Math.sqrt(
-          redDifference ** 2 +
-          greenDifference ** 2 +
-          blueDifference ** 2
+          redDifference ** 2 + greenDifference ** 2 + blueDifference ** 2
         );
 
         const match = distance < threshold;
@@ -102,6 +134,7 @@ export default function ImageComparison({
             src={`/thumbnail/${encodeURIComponent(filename)}`}
             alt={`First frame of ${filename}`}
             onLoad={loadPixels}
+            onClick={pickColor}
             onError={() => setError("Could not load the thumbnail.")}
             sx={{
               width: "100%",
