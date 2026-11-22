@@ -2,6 +2,84 @@ body {
   margin: 0;
 }
 
+body {
+  background: linear-gradient(135deg, #f4efff, #fdf8f2);
+  color: #30283d;
+}
+
 #root {
   min-height: 100vh;
+  padding: 32px 16px;
+}
+
+.MuiContainer-root {
+  background: #ffffff;
+  border: 1px solid #ece5f5;
+  border-radius: 24px;
+  box-shadow: 0 16px 50px #58407914;
+}
+
+.MuiContainer-root h1 {
+  color: #654397;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.MuiContainer-root .MuiButton-root {
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-transform: none;
+  font-weight: 600;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.MuiContainer-root .MuiButton-outlined {
+  color: #654397;
+  border-color: #ddd0ef;
+  background: #faf7ff;
+}
+
+.MuiContainer-root .MuiButton-outlined:hover {
+  background: #f0e8fc;
+  border-color: #9771c4;
+  box-shadow: 0 4px 12px #65439712;
+}
+
+.MuiContainer-root .MuiButton-contained {
+  background: #7048a5;
+  box-shadow: 0 4px 12px #7048a530;
+}
+
+.MuiContainer-root .MuiButton-contained:hover {
+  background: #593584;
+}
+
+.MuiContainer-root .MuiButton-contained.Mui-disabled {
+  background: #e7e0ef;
+  color: #706779;
+  box-shadow: none;
+}
+
+.MuiContainer-root .MuiSlider-root {
+  color: #8155b8;
+}
+
+input[type="color"] {
+  width: 52px;
+  height: 40px;
+  padding: 4px;
+  background: #faf7ff;
+  border: 1px solid #ddd0ef;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 16px 10px;
+  }
+
+  .MuiContainer-root {
+    border-radius: 16px;
+  }
 }
