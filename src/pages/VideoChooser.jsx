@@ -3,10 +3,34 @@ import { Link } from "react-router-dom";
 import {
   Alert,
   Button,
-  CircularProgress,
   Stack,
   Typography,
 } from "@mui/material";
+import withLoading from "../components/withLoading";
+
+function VideoList({ videos }) {
+  if (videos.length === 0) {
+    return <Alert severity="info">No videos are available.</Alert>;
+  }
+
+  return (
+    <Stack spacing={2}>
+      {videos.map((filename) => (
+        <Button
+          key={filename}
+          component={Link}
+          to={`/preview/${encodeURIComponent(filename)}`}
+          variant="outlined"
+          sx={{ justifyContent: "flex-start", textTransform: "none" }}
+        >
+          {filename}
+        </Button>
+      ))}
+    </Stack>
+  );
+}
+
+const VideoListWithLoading = withLoading(VideoList);
 
 export default function VideoChooser() {
   const [videos, setVideos] = useState([]);
@@ -54,25 +78,11 @@ export default function VideoChooser() {
         Pick a video to adjust the detection settings.
       </Typography>
 
-      {loading && <CircularProgress aria-label="Loading videos" />}
-
-      {error && <Alert severity="error">{error}</Alert>}
-
-      {!loading && !error && videos.length === 0 && (
-        <Alert severity="info">No videos are available.</Alert>
-      )}
-
-      {videos.map((filename) => (
-        <Button
-          key={filename}
-          component={Link}
-          to={`/preview/${encodeURIComponent(filename)}`}
-          variant="outlined"
-          sx={{ justifyContent: "flex-start", textTransform: "none" }}
-        >
-          {filename}
-        </Button>
-      ))}
+      <VideoListWithLoading
+        loading={loading}
+        error={error}
+        videos={videos}
+      />
     </Stack>
   );
 }
