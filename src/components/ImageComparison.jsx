@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, Box, Stack, Typography } from "@mui/material";
+import findLargestGroup from "../utils/findLargestGroup";
 
 export default function ImageComparison({
   filename,
@@ -39,30 +40,53 @@ export default function ImageComparison({
     const context = canvas.getContext("2d");
     const result = context.createImageData(pixels.width, pixels.height);
 
+    const binary = Array.from(
+      { length: pixels.height },
+      () => new Uint8Array(pixels.width)
+    );
+
     const red = parseInt(targetColor.slice(1, 3), 16);
     const green = parseInt(targetColor.slice(3, 5), 16);
     const blue = parseInt(targetColor.slice(5, 7), 16);
 
-    for (let i = 0; i < pixels.data.length; i += 4) {
-      const redDifference = pixels.data[i] - red;
-      const greenDifference = pixels.data[i + 1] - green;
-      const blueDifference = pixels.data[i + 2] - blue;
+    for (let row = 0; row < pixels.height; row++) {
+      for (let column = 0; column < pixels.width; column++) {
+        const i = (row * pixels.width + column) * 4;
 
-      const distance = Math.sqrt(
-        redDifference ** 2 +
-        greenDifference ** 2 +
-        blueDifference ** 2
-      );
+        const redDifference = pixels.data[i] - red;
+        const greenDifference = pixels.data[i + 1] - green;
+        const blueDifference = pixels.data[i + 2] - blue;
 
-      const value = distance < threshold ? 255 : 0;
+        const distance = Math.sqrt(
+          redDifference ** 2 +
+          greenDifference ** 2 +
+          blueDifference ** 2
+        );
 
-      result.data[i] = value;
-      result.data[i + 1] = value;
-      result.data[i + 2] = value;
-      result.data[i + 3] = 255;
+        const match = distance < threshold;
+        binary[row][column] = match ? 1 : 0;
+
+        const value = match ? 255 : 0;
+        result.data[i] = value;
+        result.data[i + 1] = value;
+        result.data[i + 2] = value;
+        result.data[i + 3] = 255;
+      }
     }
 
     context.putImageData(result, 0, 0);
+
+    const largest = findLargestGroup(binary);
+
+    if (largest) {
+      context.beginPath();
+      context.arc(largest.x, largest.y, 6, 0, Math.PI * 2);
+      context.fillStyle = "#ff3030";
+      context.fill();
+      context.strokeStyle = "#00ff00";
+      context.lineWidth = 2;
+      context.stroke();
+    }
   }, [pixels, targetColor, threshold]);
 
   return (
@@ -94,7 +118,7 @@ export default function ImageComparison({
             component="canvas"
             ref={canvasRef}
             role="img"
-            aria-label="Black and white color matches"
+            aria-label="Color matches with the largest group's centroid"
             sx={{
               width: "100%",
               display: "block",
