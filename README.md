@@ -73,9 +73,20 @@ npm run build
 ### Screenshots
 
 The video chooser page:
+![Video chooser](screenshots/1.png)
 
-![Video chooser](screenshots/videos.png)
+![Preview example 2](screenshots/2.png)
 
-The preview page with the detection settings:
+![Preview example 3](screenshots/3.png)
 
-![Video preview](screenshots/preview.png)
+![Preview example 4](screenshots/4.png)
+
+![Preview example 5](screenshots/5.png)
+
+![Preview example 6](screenshots/6.png)
+
+![Preview example 7](screenshots/7.png)
+
+![Preview example 8](screenshots/8.png)
+
+![CSV results](screenshots/9.png)
